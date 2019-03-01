@@ -1,10 +1,16 @@
 package com.panchen.jailer.core.cluster;
 
+import java.io.File;
+
 public class Instance {
 
     public String ip;
 
-    public Integer port;
+    public int port;
 
-    public Boolean isLeader;
+    public boolean isLeader;
+
+    public long snapShotCount;
+
+    public File snapShotFolder;
 }
