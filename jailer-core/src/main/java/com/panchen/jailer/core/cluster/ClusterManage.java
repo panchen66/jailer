@@ -11,7 +11,7 @@ public class ClusterManage {
     // if null , means client
     public Instance self;
     public ConcurrentLinkedDeque<Instance> instances = new ConcurrentLinkedDeque<>();
-    public transient int health;
+    public transient int health = 3;
     public AtomicLong gid = new AtomicLong(0);
     public AtomicLong bid = new AtomicLong(0);
 
