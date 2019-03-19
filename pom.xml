@@ -18,6 +18,7 @@
 		<module>jailer-naming</module>
 		<module>jailer-client</module>
 		<module>jailer-core</module>
+		<module>jailer-mldl</module>
 	</modules>
 
 	<dependencyManagement>

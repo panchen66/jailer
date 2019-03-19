@@ -1,27 +1,35 @@
 package com.panchen.jailer.core.loadBalancer;
 
 import java.util.Set;
+import java.util.HashMap;
+import org.springframework.stereotype.Component;
 
+import com.panchen.jailer.core.common.DataTree;
 import com.panchen.jailer.core.common.DataTree.Node;
 
-public class DefalutAsyLoadBalancer implements LoadBalancer{
+@Component
+public class DefalutAsyLoadBalancer implements LoadBalancer {
+
+    // synchronization problem?
+    private static HashMap<String, String> preferredServices = new HashMap<>();
+    
+    private DataTree dataTree;
+    private LBRule lbRule;
 
     @Override
     public String chooseServer(Set<Node> servers) {
-        // TODO Auto-generated method stub
-        return null;
+        //
+        return lbRule.choose(servers);
     }
 
     @Override
-    public void markServer(Node node) {
-        // TODO Auto-generated method stub
-        
+    public Set<Node> getServers(String key) {
+        return dataTree.get(key);
     }
 
     @Override
-    public Set<Node> getAllServers(Object key) {
-        // TODO Auto-generated method stub
-        return null;
+    public void setLBRule(LBRule lbRule) {
+        this.lbRule = lbRule;
     }
 
 

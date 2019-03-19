@@ -8,10 +8,7 @@ public interface LoadBalancer {
 
     public String chooseServer(Set<Node> servers);
 
-
-    public void markServer(Node node);
-
-
-    public Set<Node> getAllServers(Object key);
-
+    public Set<Node> getServers(String key);
+    
+    public void setLBRule(LBRule lbRule);
 }

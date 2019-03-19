@@ -1,14 +1,11 @@
 package com.panchen.jailer.core.common;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import com.panchen.jailer.core.loadBalancer.LoadBalancer;
 
 /**                     jailer
  *                        |  
@@ -34,14 +31,29 @@ public class DataTree {
     
     private AtomicLong nodeNum=new AtomicLong(0);
     
-    private LoadBalancer lb;
-    
-    
-    // depth/width 
-    public String[] get(String parentV) {
-        String[] result = null;
-        return result;
+    public Map<String, Set<Node>> getAllNamingNode(){
+        return null;
         
+    }
+    
+    public Set<Node> get(String key) {
+        String[] levelData=key.split(CUTTERCHAR);
+        vaild(levelData);
+        return widthGet(levelData);
+    }
+    
+    private Set<Node> widthGet(String[] data) {
+        Node tmp=head;
+        for(int i=0;i<data.length-1;i++) {
+            for(Node child:tmp.childs) {
+                if(data[i].equals(child.value)) {
+                    tmp=child;
+                    break;
+                }
+                
+            }
+        }
+        return tmp.childs;
     }
     
     
@@ -107,6 +119,7 @@ public class DataTree {
 
         public String value;
         public Set<Node> childs=new HashSet<>();
+        public long lastCallTime;
         
         private ReadWriteLock childLock=new ReentrantReadWriteLock();
         
