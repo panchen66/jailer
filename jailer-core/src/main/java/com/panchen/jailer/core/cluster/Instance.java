@@ -2,6 +2,8 @@ package com.panchen.jailer.core.cluster;
 
 import java.io.File;
 
+import com.panchen.jailer.core.common.DataTree;
+
 public class Instance {
 
     public String ip;
@@ -13,4 +15,8 @@ public class Instance {
     public long snapShotCount;
 
     public File snapShotFolder;
+    
+    public DataTree dataTree;
+    
+    public long snapShotInterval;
 }

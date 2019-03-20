@@ -8,9 +8,9 @@ public interface SnapShot {
 
     long deserialize(DataTree dt) throws IOException;
 
-    void serialize(DataTree dt, File name) throws IOException;
+    long serialize(DataTree dt) throws IOException,ClassNotFoundException;
 
-    File findMostRecentSnapshot() throws IOException;
+    long findMostRecentSnapshotSeq() throws IOException;
 
     Boolean vaild(File f);
 }

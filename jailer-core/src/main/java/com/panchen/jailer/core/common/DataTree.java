@@ -1,5 +1,9 @@
 package com.panchen.jailer.core.common;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -22,7 +26,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author pc
  *
  */
-public class DataTree {
+public class DataTree implements Externalizable{
 
     private static String NODEHEADKEY = "jailer";
     private static String CUTTERCHAR = "-";
@@ -126,6 +130,17 @@ public class DataTree {
 
     }
 
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeObject(head);
+    }
 
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        this.head=(Node) in.readObject();
+    }
+
+        
+    
 
 }

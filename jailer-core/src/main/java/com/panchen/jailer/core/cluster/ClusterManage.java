@@ -14,7 +14,7 @@ public class ClusterManage {
     public transient int health = 3;
     public AtomicLong gid = new AtomicLong(0);
     public AtomicLong bid = new AtomicLong(0);
-
+    
     public Instance getLeader() throws Exception {
         if (self.isLeader) {
             return self;

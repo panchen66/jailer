@@ -1,10 +1,15 @@
 package com.panchen.jailer.naming.persistence;
 
 import java.io.File;
+import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import com.panchen.jailer.core.common.DataTree;
 import com.panchen.jailer.core.util.Utils;
 import org.springframework.stereotype.Component;
@@ -14,36 +19,57 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Component
 public class FileManage {
 
+
     @Autowired
     private ClusterManage clusterManage;
 
-    private class FileSnapShot implements SnapShot {
+    public class SnapShotActuator {
+        private ThreadPoolExecutor snapShotThreadPoolExecutor =
+                new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
+    }
+
+    public class FileSnapShot implements SnapShot {
 
         @Override
         public long deserialize(DataTree dt) throws IOException {
-            // TODO Auto-generated method stub
-            return 0;
+            long seq = findMostRecentSnapshotSeq();
+            File snapShotF = new File("jailer-" + seq);
+            try (ObjectOutputStream snapOS = new ObjectOutputStream(new FileOutputStream(snapShotF))) {
+                snapOS.writeObject(clusterManage.self.dataTree);
+            }
+            return seq;
         }
 
         @Override
-        public void serialize(DataTree dt, File name) throws IOException {
-            // TODO Auto-generated method stub
+        public long serialize(DataTree dt) throws IOException, ClassNotFoundException {
+            long seq = findMostRecentSnapshotSeq();
+            File snapShotF = new File("jailer-" + ++seq);
+            try (ObjectInputStream snapIS = new ObjectInputStream(new FileInputStream(snapShotF))) {
+                clusterManage.self.dataTree = (DataTree) snapIS.readObject();
+            }
+            return seq;
         }
 
         @Override
-        public File findMostRecentSnapshot() throws IOException {
+        public long findMostRecentSnapshotSeq() throws IOException {
             List<File> vaildSnapShots = getAllSnapShotFile();
             if (null == vaildSnapShots || 0 >= vaildSnapShots.size()) {
-                return null;
+                return 1l;
             }
             Collections.sort(vaildSnapShots, new SnapShotComparator<File>());
-            return vaildSnapShots.get(0);
+            String mostRecentSnapshotName = vaildSnapShots.get(0).getName();
+            String[] seq = mostRecentSnapshotName.split("-");
+            if (1 >= seq.length) {
+                return 1l;
+            }
+            return Long.valueOf(seq[1]);
         }
 
 
         @Override
         public Boolean vaild(File f) {
-            return null;
+            // todo
+            return true;
         }
 
         /**
@@ -64,7 +90,6 @@ public class FileManage {
 
         }
 
-
         private List<File> getAllSnapShotFile() {
             List<File> snapShots = Utils.searchFolder(clusterManage.self.snapShotFolder);
             // vaild
@@ -73,7 +98,6 @@ public class FileManage {
             }
             return snapShots;
         }
-
 
     }
 }

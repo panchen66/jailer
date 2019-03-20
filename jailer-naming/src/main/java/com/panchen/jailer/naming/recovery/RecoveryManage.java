@@ -17,11 +17,7 @@ public class RecoveryManage {
     @Autowired
     FileManage fileManage;
 
-    private void recoveryByPersistence() {
+    private void recoveryByPersistence() {}
 
-    }
-
-    private void recoveryBytransportation() {
-        
-    }
+    private void recoveryByTransportation() {}
 }
