@@ -19,8 +19,7 @@
 		<module>jailer-client</module>
 		<module>jailer-core</module>
 		<module>jailer-mldl</module>
-        <module>jailer-dl</module>
-    </modules>
+	</modules>
 
 	<dependencyManagement>
 		<dependencies>
