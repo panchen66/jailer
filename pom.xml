@@ -11,7 +11,7 @@
 
 	<properties>
 		<spring-boot-dependencies.version>2.1.3.RELEASE</spring-boot-dependencies.version>
-		<guaua.version>27.1-jre</guaua.version>
+		<guaua.version>29.0-jre</guaua.version>
 	</properties>
 
 	<modules>
